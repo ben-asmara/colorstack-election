@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Board Applications — ColorStack @ CSULA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --black: #0a0a0a;
+    --black-2: #111111;
+    --black-3: #1a1a1a;
+    --black-4: #242424;
+    --gold: #F5A623;
+    --gold-dark: #C4831A;
+    --gold-light: #FDF3E0;
+    --gold-dim: rgba(245,166,35,0.1);
+    --gold-border: rgba(245,166,35,0.28);
+    --white: #ffffff;
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.5);
+    --text-soft: rgba(255,255,255,0.75);
+    --border: rgba(255,255,255,0.08);
+    --radius: 12px;
+    --radius-lg: 18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 62px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-img { height: 34px; width: auto; }
+  .nav-logo-text { font-family: 'DM Serif Display', serif; font-size: 17px; color: #fff; }
+  .nav-logo-text em { color: var(--gold); font-style: normal; }
+  .nav-links { display: flex; gap: 1.75rem; }
+  .nav-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-apply { background: var(--gold); color: #000 !important; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.15s; }
+  .nav-apply:hover { background: #ffb733; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    position: relative; overflow: hidden;
+    background: var(--black);
+    padding: 6rem 2rem 5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -120px; right: -100px;
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(245,166,35,0.09) 0%, transparent 65%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -80px; left: -80px;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(245,166,35,0.05) 0%, transparent 65%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+  .hero-logo { height: 80px; width: auto; margin-bottom: 2rem; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--gold-dim); border: 1px solid var(--gold-border);
+    color: var(--gold); font-size: 12px; font-weight: 600;
+    padding: 5px 16px; border-radius: 20px; margin-bottom: 1.5rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .hero-eyebrow .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3.4rem); color: #fff; line-height: 1.1; margin-bottom: 1.25rem; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p { color: var(--text-soft); font-size: 16px; max-width: 500px; margin: 0 auto 2rem; }
+  .hero-dates { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 2.5rem; }
+  .date-chip { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text-soft); font-size: 13px; padding: 6px 16px; border-radius: 20px; }
+  .date-chip strong { color: var(--gold); }
+  .hero-cta { display: inline-block; background: var(--gold); color: #000; font-size: 15px; font-weight: 700; padding: 14px 36px; border-radius: 30px; text-decoration: none; transition: all 0.15s; }
+  .hero-cta:hover { background: #ffb733; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(245,166,35,0.3); }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-tag { display: inline-block; background: var(--gold-dim); color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 0.75rem; border: 1px solid var(--gold-border); }
+  .section-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 3vw, 2.4rem); color: #fff; margin-bottom: 0.75rem; }
+  .section-header p { color: var(--text-muted); max-width: 540px; margin: 0 auto; font-size: 15px; }
+
+  /* POSITIONS */
+  #positions { background: var(--black-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .positions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+  .pos-card { background: var(--black-3); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; transition: all 0.2s; position: relative; overflow: hidden; }
+  .pos-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); border-radius: var(--radius-lg) var(--radius-lg) 0 0; opacity: 0.4; transition: opacity 0.2s; }
+  .pos-card:hover { transform: translateY(-3px); border-color: var(--gold-border); box-shadow: 0 8px 32px rgba(245,166,35,0.08); }
+  .pos-card:hover::before { opacity: 1; }
+  .pos-icon { font-size: 22px; margin-bottom: 0.75rem; }
+  .pos-title { font-family: 'DM Serif Display', serif; font-size: 18px; margin-bottom: 0.4rem; color: #fff; }
+  .pos-subtitle { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gold); margin-bottom: 0.75rem; }
+  .pos-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 1rem; }
+  .pos-responsibilities { list-style: none; margin-bottom: 1rem; }
+  .pos-responsibilities li { font-size: 12.5px; color: rgba(255,255,255,0.45); padding: 3px 0 3px 14px; position: relative; line-height: 1.5; }
+  .pos-responsibilities li::before { content: '→'; position: absolute; left: 0; font-size: 10px; color: var(--gold); opacity: 0.6; top: 4px; }
+  .pos-skills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .skill-tag { font-size: 11px; font-weight: 500; color: var(--gold); padding: 3px 9px; border-radius: 20px; border: 1px solid var(--gold-border); background: var(--gold-dim); }
+
+  /* FORM */
+  #apply { background: var(--black); }
+  .form-wrap { background: var(--black-2); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; }
+  .form-progress { display: flex; background: var(--black-3); border-bottom: 1px solid var(--border); }
+  .progress-step { flex: 1; padding: 0.85rem 0.5rem; text-align: center; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); cursor: pointer; transition: all 0.2s; border-bottom: 2px solid transparent; }
+  .progress-step.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .progress-step.done { color: rgba(245,166,35,0.45); }
+  .form-page { display: none; padding: 2.5rem; }
+  .form-page.active { display: block; }
+  .form-page h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 0.4rem; }
+  .form-page .page-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 2rem; }
+  .field { margin-bottom: 1.5rem; }
+  .field label { display: block; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); margin-bottom: 6px; }
+  .field label .req { color: var(--gold); margin-left: 2px; }
+  .field label .hint { font-weight: 400; color: var(--text-muted); font-size: 12px; }
+  .field input, .field select, .field textarea { width: 100%; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #fff; background: var(--black-3); transition: border-color 0.15s, box-shadow 0.15s; outline: none; }
+  .field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .field select option { background: #1a1a1a; color: #fff; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(245,166,35,0.1); }
+  .field textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .rank-grid { display: grid; gap: 8px; }
+  .rank-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.07); cursor: pointer; background: var(--black-3); transition: all 0.15s; user-select: none; }
+  .rank-item:hover { border-color: var(--gold-border); background: var(--gold-dim); }
+  .rank-item.selected { border-color: var(--gold); background: var(--gold-dim); }
+  .rank-num { width: 26px; height: 26px; border-radius: 50%; background: rgba(245,166,35,0.1); color: var(--gold); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .rank-item.selected .rank-num { background: var(--gold); color: #000; font-weight: 700; }
+  .rank-item-label { font-size: 14px; font-weight: 500; flex: 1; color: #fff; }
+  .rank-item-sub { font-size: 12px; color: var(--text-muted); }
+  .radio-grid { display: grid; gap: 8px; }
+  .radio-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.07); cursor: pointer; background: var(--black-3); font-size: 14px; color: var(--text-soft); transition: all 0.15s; }
+  .radio-opt input { accent-color: var(--gold); }
+  .radio-opt:has(input:checked) { border-color: var(--gold); background: var(--gold-dim); color: #fff; }
+  .upload-zone { border: 1.5px dashed var(--gold-border); border-radius: 12px; padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--black-3); }
+  .upload-zone:hover { border-color: var(--gold); background: var(--gold-dim); }
+  .upload-icon-wrap { font-size: 2rem; margin-bottom: 0.75rem; }
+  .upload-zone p { font-size: 14px; color: var(--text-muted); }
+  .upload-zone span { color: var(--gold); font-weight: 500; }
+  .upload-filename { margin-top: 0.75rem; font-size: 13px; color: var(--gold); font-weight: 500; display: none; }
+  .word-count { display: flex; justify-content: flex-end; font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+  .word-count.over { color: #ff6b6b; }
+  .form-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .btn-back { background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted); font-size: 14px; font-weight: 500; padding: 10px 22px; border-radius: 30px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .btn-back:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-next { background: var(--gold); color: #000; border: none; font-size: 14px; font-weight: 700; padding: 11px 28px; border-radius: 30px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .btn-next:hover { background: #ffb733; transform: translateY(-1px); }
+  .btn-submit { background: var(--gold); color: #000; border: none; font-size: 15px; font-weight: 700; padding: 13px 32px; border-radius: 30px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .btn-submit:hover { background: #ffb733; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(245,166,35,0.3); }
+  .success-screen { display: none; padding: 4rem 2.5rem; text-align: center; }
+  .success-screen .checkmark { width: 64px; height: 64px; border-radius: 50%; background: var(--gold-dim); border: 1px solid var(--gold-border); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--gold); }
+  .success-screen h3 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: #fff; margin-bottom: 0.75rem; }
+  .success-screen p { color: var(--text-muted); font-size: 15px; max-width: 420px; margin: 0 auto 2rem; }
+  .timeline-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+  .timeline-step { background: var(--black-3); border-radius: var(--radius); padding: 1rem; border: 1px solid var(--border); }
+  .timeline-step .ts-date { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .timeline-step .ts-label { font-size: 13px; font-weight: 500; color: var(--text-soft); }
+
+  /* FAQ */
+  #faq { background: var(--black-2); border-top: 1px solid var(--border); }
+  .faq-list { max-width: 640px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-q { width: 100%; background: none; border: none; text-align: left; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--text-soft); padding: 1.25rem 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.15s; }
+  .faq-q:hover { color: var(--gold); }
+  .faq-q .arrow { transition: transform 0.2s; font-size: 18px; color: var(--gold); }
+  .faq-q.open .arrow { transform: rotate(45deg); }
+  .faq-a { display: none; padding: 0 0 1.25rem; font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+  .faq-a.open { display: block; }
+
+  footer { background: var(--black-3); border-top: 1px solid var(--border); text-align: center; padding: 2rem; font-size: 13px; color: var(--text-muted); }
+  footer strong { color: #fff; }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero { padding: 4rem 1.5rem 3.5rem; }
+    .form-page { padding: 1.5rem; }
+    .progress-step { font-size: 9px; padding: 0.6rem 0.2rem; }
+    .timeline-steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="nav-logo-text"><em>ColorStack</em> @ CSULA</span>
+  </a>
+  <div class="nav-links">
+    <a href="#positions">Positions</a>
+    <a href="#apply">Apply</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a class="nav-apply" href="#apply">Apply now</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><div class="pulse"></div> Applications now open</div>
+    <h1>Join the <em>ColorStack</em><br>Board 2025–2026</h1>
+    <p>Help build community, opportunity, and belonging for Black and Latinx students in computing at Cal State LA.</p>
+    <div class="hero-dates">
+      <div class="date-chip">Applications close <strong>June 15</strong></div>
+      <div class="date-chip">Interviews <strong>TBD</strong></div>
+      <div class="date-chip">Results <strong>TBD</strong></div>
+    </div>
+    <a class="hero-cta" href="#apply">Start your application</a>
+  </div>
+</section>
+
+<section id="positions">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Open Positions</div>
+      <h2>Find your role on the board</h2>
+      <p>Seven positions are open for the 2025–2026 academic year. Read each description before applying.</p>
+    </div>
+    <div class="positions-grid">
+      <div class="pos-card">
+        <div class="pos-icon">🏛️</div>
+        <div class="pos-title">Vice President</div>
+        <div class="pos-subtitle">Leadership · Operations</div>
+        <div class="pos-desc">The VP acts as the president's right hand — stepping in when needed and ensuring board operations run smoothly across all teams.</div>
+        <ul class="pos-responsibilities">
+          <li>Support the president in all chapter decisions</li>
+          <li>Facilitate and lead board meetings</li>
+          <li>Serve as chapter liaison to national ColorStack</li>
+          <li>Oversee inter-committee collaboration</li>
+          <li>Step in as acting president when unavailable</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Leadership</span><span class="skill-tag">Communication</span><span class="skill-tag">Organization</span></div>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">💰</div>
+        <div class="pos-title">Treasurer</div>
+        <div class="pos-subtitle">Finance · Administration</div>
+        <div class="pos-desc">The Treasurer manages all chapter finances — from applying for funding to tracking every dollar spent on events and operations.</div>
+        <ul class="pos-responsibilities">
+          <li>Manage and track the chapter's annual budget</li>
+          <li>Submit funding requests to the university</li>
+          <li>Process reimbursements and vendor payments</li>
+          <li>Report financial status at board meetings</li>
+          <li>Identify sponsorship and external funding opportunities</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Budgeting</span><span class="skill-tag">Attention to Detail</span><span class="skill-tag">Spreadsheets</span></div>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">📋</div>
+        <div class="pos-title">Secretary</div>
+        <div class="pos-subtitle">Communications · Records</div>
+        <div class="pos-desc">The Secretary keeps the chapter organized and informed — from documenting decisions to coordinating internal communications across the board.</div>
+        <ul class="pos-responsibilities">
+          <li>Take and distribute minutes for all board meetings</li>
+          <li>Manage chapter email inbox and correspondence</li>
+          <li>Maintain records, files, and meeting calendars</li>
+          <li>Send reminders and follow-ups to board members</li>
+          <li>Track action items from meetings to completion</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Writing</span><span class="skill-tag">Organization</span><span class="skill-tag">Follow-through</span></div>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">🎉</div>
+        <div class="pos-title">Event Coordinator</div>
+        <div class="pos-subtitle">Events · Programming</div>
+        <div class="pos-desc">The Event Coordinator brings the chapter to life — planning everything from casual hangouts to large career events that make members feel at home.</div>
+        <ul class="pos-responsibilities">
+          <li>Plan and execute 2–4 events per semester</li>
+          <li>Coordinate venues, catering, and logistics</li>
+          <li>Collaborate with other boards on joint events</li>
+          <li>Manage event RSVPs and day-of coordination</li>
+          <li>Gather and incorporate member feedback</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Event Planning</span><span class="skill-tag">Logistics</span><span class="skill-tag">Creativity</span></div>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">📣</div>
+        <div class="pos-title">Marketing & Outreach</div>
+        <div class="pos-subtitle">Brand · Growth</div>
+        <div class="pos-desc">Marketing & Outreach is the public face of ColorStack — growing our membership, building our brand, and making sure students know they belong here.</div>
+        <ul class="pos-responsibilities">
+          <li>Manage Instagram, LinkedIn, and other social channels</li>
+          <li>Design flyers, graphics, and promotional materials</li>
+          <li>Lead tabling and recruitment drives</li>
+          <li>Coordinate with clubs and departments for cross-promotion</li>
+          <li>Track engagement and membership growth metrics</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Social Media</span><span class="skill-tag">Design (Canva/Figma)</span><span class="skill-tag">Storytelling</span></div>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">💻</div>
+        <div class="pos-title">Tech Lead</div>
+        <div class="pos-subtitle">Technology · Infrastructure</div>
+        <div class="pos-desc">The Tech Lead ensures our chapter runs on reliable tools and that members have access to technical resources, workshops, and a strong digital presence.</div>
+        <ul class="pos-responsibilities">
+          <li>Maintain and update the chapter website</li>
+          <li>Manage digital tools (Discord, Notion, Google Drive)</li>
+          <li>Organize and lead technical skill-building workshops</li>
+          <li>Identify and onboard useful technology for the board</li>
+          <li>Support members with technical interview prep resources</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Web Dev</span><span class="skill-tag">Tech Tools</span><span class="skill-tag">Teaching</span></div>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">🚀</div>
+        <div class="pos-title">Professional Development</div>
+        <div class="pos-subtitle">Career · Mentorship</div>
+        <div class="pos-desc">The Professional Development lead connects members to internships, full-time roles, and mentors — making sure every ColorStack member has a clear path forward.</div>
+        <ul class="pos-responsibilities">
+          <li>Organize resume reviews, mock interviews & workshops</li>
+          <li>Build relationships with company recruiters</li>
+          <li>Coordinate mentorship pairing with alumni/professionals</li>
+          <li>Curate and share job, internship, and scholarship opportunities</li>
+          <li>Plan career fairs and industry networking nights</li>
+        </ul>
+        <div class="pos-skills"><span class="skill-tag">Career Coaching</span><span class="skill-tag">Networking</span><span class="skill-tag">Mentorship</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="apply">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Apply Now</div>
+      <h2>Board Application</h2>
+      <p>Complete all sections carefully. Applications close <strong style="color:var(--gold);">June 15</strong>.</p>
+    </div>
+    <div class="form-wrap">
+      <div class="form-progress">
+        <div class="progress-step active">1. Positions</div>
+        <div class="progress-step">2. About You</div>
+        <div class="progress-step">3. Essays</div>
+        <div class="progress-step">4. Resume</div>
+        <div class="progress-step">5. Availability</div>
+      </div>
+
+      <div class="form-page active" id="page-0">
+        <h3>Choose your positions</h3>
+        <p class="page-desc">Click positions you're interested in to rank them. First click = Rank 1, second = Rank 2, etc.</p>
+        <div class="rank-grid">
+          <div class="rank-item" data-pos="Vice President"><div class="rank-num">—</div><div><div class="rank-item-label">Vice President</div><div class="rank-item-sub">Leadership & Operations</div></div></div>
+          <div class="rank-item" data-pos="Treasurer"><div class="rank-num">—</div><div><div class="rank-item-label">Treasurer</div><div class="rank-item-sub">Finance & Administration</div></div></div>
+          <div class="rank-item" data-pos="Secretary"><div class="rank-num">—</div><div><div class="rank-item-label">Secretary</div><div class="rank-item-sub">Communications & Records</div></div></div>
+          <div class="rank-item" data-pos="Event Coordinator"><div class="rank-num">—</div><div><div class="rank-item-label">Event Coordinator</div><div class="rank-item-sub">Events & Programming</div></div></div>
+          <div class="rank-item" data-pos="Marketing & Outreach"><div class="rank-num">—</div><div><div class="rank-item-label">Marketing & Outreach</div><div class="rank-item-sub">Brand & Growth</div></div></div>
+          <div class="rank-item" data-pos="Tech Lead"><div class="rank-num">—</div><div><div class="rank-item-label">Tech Lead</div><div class="rank-item-sub">Technology & Infrastructure</div></div></div>
+          <div class="rank-item" data-pos="Professional Development"><div class="rank-num">—</div><div><div class="rank-item-label">Professional Development</div><div class="rank-item-sub">Career & Mentorship</div></div></div>
+        </div>
+        <div class="form-nav"><span></span><button class="btn-next" onclick="nextPage(0)">Next: About You →</button></div>
+      </div>
+
+      <div class="form-page" id="page-1">
+        <h3>About you</h3>
+        <p class="page-desc">Basic information so we know who's applying.</p>
+        <div class="two-col">
+          <div class="field"><label>Full name <span class="req">*</span></label><input type="text" placeholder="Your full name" /></div>
+          <div class="field"><label>Cal State LA email <span class="req">*</span></label><input type="email" placeholder="you@calstatela.edu" /></div>
+        </div>
+        <div class="two-col">
+          <div class="field"><label>Major <span class="req">*</span></label><input type="text" placeholder="e.g. Computer Science" /></div>
+          <div class="field"><label>Academic year <span class="req">*</span></label>
+            <select><option value="">Select year...</option><option>Freshman</option><option>Sophomore</option><option>Junior</option><option>Senior</option><option>Graduate Student</option></select>
+          </div>
+        </div>
+        <div class="form-nav"><button class="btn-back" onclick="prevPage(1)">← Back</button><button class="btn-next" onclick="nextPage(1)">Next: Essays →</button></div>
+      </div>
+
+      <div class="form-page" id="page-2">
+        <h3>Short answer questions</h3>
+        <p class="page-desc">Be specific and authentic. Word limits are soft guidelines — quality over quantity.</p>
+        <div class="field"><label>Why do you want to join the ColorStack board? <span class="req">*</span></label><textarea id="q1" placeholder="Share your motivation and what you hope to contribute..." oninput="countWords('q1','wc1',250)"></textarea><div class="word-count" id="wc1"><span>0</span> / 250 words</div></div>
+        <div class="field"><label>What experience or skills make you a strong fit for your top position? <span class="req">*</span></label><textarea id="q2" placeholder="Highlight relevant experience, skills, or projects..." oninput="countWords('q2','wc2',250)"></textarea><div class="word-count" id="wc2"><span>0</span> / 250 words</div></div>
+        <div class="field"><label>Describe a time you took initiative. What was the outcome? <span class="req">*</span></label><textarea id="q3" placeholder="Walk us through a specific example..." oninput="countWords('q3','wc3',200)"></textarea><div class="word-count" id="wc3"><span>0</span> / 200 words</div></div>
+        <div class="field"><label>What's one goal you'd want ColorStack @ Cal State LA to achieve this year? How would you help make it happen? <span class="req">*</span></label><textarea id="q4" placeholder="Be specific about the goal and your plan..." oninput="countWords('q4','wc4',200)"></textarea><div class="word-count" id="wc4"><span>0</span> / 200 words</div></div>
+        <div class="form-nav"><button class="btn-back" onclick="prevPage(2)">← Back</button><button class="btn-next" onclick="nextPage(2)">Next: Resume →</button></div>
+      </div>
+
+      <div class="form-page" id="page-3">
+        <h3>Upload your resume</h3>
+        <p class="page-desc">PDF preferred. Max 5MB. Make sure your resume is up to date before submitting.</p>
+        <div class="upload-zone" onclick="document.getElementById('resumeFile').click()">
+          <div class="upload-icon-wrap">📄</div>
+          <p><span>Click to upload</span> your resume</p>
+          <p style="margin-top:4px;font-size:13px;">PDF, DOC, or DOCX · Max 5MB</p>
+          <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFile(this)" />
+        </div>
+        <div class="upload-filename" id="uploadedName"></div>
+        <div class="form-nav"><button class="btn-back" onclick="prevPage(3)">← Back</button><button class="btn-next" onclick="nextPage(3)">Next: Availability →</button></div>
+      </div>
+
+      <div class="form-page" id="page-4">
+        <h3>Availability</h3>
+        <p class="page-desc">Help us understand your bandwidth for the year ahead.</p>
+        <div class="field"><label>How many hours per week can you commit to ColorStack? <span class="req">*</span></label>
+          <div class="radio-grid">
+            <label class="radio-opt"><input type="radio" name="hours" value="2-4"> 2–4 hours per week</label>
+            <label class="radio-opt"><input type="radio" name="hours" value="4-6"> 4–6 hours per week</label>
+            <label class="radio-opt"><input type="radio" name="hours" value="6+"> 6+ hours per week</label>
+          </div>
+        </div>
+        <div class="field"><label>Are you available for weekly board meetings? <span class="req">*</span></label>
+          <div class="radio-grid">
+            <label class="radio-opt"><input type="radio" name="meetings" value="yes"> Yes, I can commit to weekly meetings</label>
+            <label class="radio-opt"><input type="radio" name="meetings" value="depends"> Depends on the day/time — I'd need to confirm</label>
+            <label class="radio-opt"><input type="radio" name="meetings" value="limited"> I have some scheduling constraints</label>
+          </div>
+        </div>
+        <div class="field"><label>Will you be enrolled at Cal State LA for the full 2025–2026 academic year? <span class="req">*</span></label>
+          <div class="radio-grid">
+            <label class="radio-opt"><input type="radio" name="enrolled" value="yes"> Yes, full year</label>
+            <label class="radio-opt"><input type="radio" name="enrolled" value="unsure"> Unsure — possibly graduating mid-year</label>
+            <label class="radio-opt"><input type="radio" name="enrolled" value="no"> No</label>
+          </div>
+        </div>
+        <div class="field"><label>Anything that might affect your availability this year? <span class="hint">(optional)</span></label><textarea placeholder="Internships, part-time work, classes, personal commitments..."></textarea></div>
+        <div class="form-nav"><button class="btn-back" onclick="prevPage(4)">← Back</button><button class="btn-submit" onclick="submitForm()">Submit application ✓</button></div>
+      </div>
+
+      <div class="success-screen" id="success">
+        <div class="checkmark">✓</div>
+        <h3>Application submitted!</h3>
+        <p>Thank you for applying to the ColorStack board. We'll review your application and be in touch soon.</p>
+        <div class="timeline-steps">
+          <div class="timeline-step"><div class="ts-date">June 15</div><div class="ts-label">Applications close</div></div>
+          <div class="timeline-step"><div class="ts-date">TBD</div><div class="ts-label">Interview invites sent</div></div>
+          <div class="timeline-step"><div class="ts-date">TBD</div><div class="ts-label">Results announced</div></div>
+        </div>
+        <p style="margin-top:1.5rem;font-size:13px;">Questions? Email <a href="mailto:bissano@calstatela.edu">bissano@calstatela.edu</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I apply for more than one position? <span class="arrow">+</span></button><div class="faq-a">Yes! You can rank as many positions as you'd like. We'll use your ranking to find the best fit during our review process.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Do I need prior board or leadership experience? <span class="arrow">+</span></button><div class="faq-a">Not at all. We look for passion, commitment, and a willingness to grow. Many of our strongest board members had no formal leadership experience before joining ColorStack.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What's the time commitment? <span class="arrow">+</span></button><div class="faq-a">Most positions require 3–5 hours per week including board meetings, event planning, and role-specific duties. Time commitment may increase around events and deadlines.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Will there be an interview? <span class="arrow">+</span></button><div class="faq-a">Yes. Shortlisted applicants will be contacted for a 20–30 minute interview. Interviews may be in-person or virtual.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">I'm a freshman — can I still apply? <span class="arrow">+</span></button><div class="faq-a">Absolutely. We welcome students from all years. Your perspective as a newer student is genuinely valuable to the board and to the community we're building.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What happens after I submit? <span class="arrow">+</span></button><div class="faq-a">The current board will review all applications after June 15. Interview invites and final results will be announced shortly after — we'll reach out by email.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>ColorStack @ Cal State LA</strong> · 2025–2026 Board Applications</p>
+  <p style="margin-top:6px;">Questions? <a href="mailto:bissano@calstatela.edu">bissano@calstatela.edu</a></p>
+</footer>
+
+<script>
+  let rankings = [];
+  document.querySelectorAll('.rank-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const pos = item.dataset.pos;
+      const idx = rankings.indexOf(pos);
+      if (idx > -1) { rankings.splice(idx, 1); item.classList.remove('selected'); }
+      else { rankings.push(pos); item.classList.add('selected'); }
+      document.querySelectorAll('.rank-item').forEach(i => {
+        const r = rankings.indexOf(i.dataset.pos);
+        const n = i.querySelector('.rank-num');
+        if (r > -1) { n.textContent = r + 1; i.classList.add('selected'); }
+        else { n.textContent = '—'; i.classList.remove('selected'); }
+      });
+    });
+  });
+
+  let currentPage = 0;
+  function nextPage(from) {
+    document.getElementById('page-' + from).classList.remove('active');
+    document.getElementById('page-' + (from + 1)).classList.add('active');
+    currentPage = from + 1; updateProgress();
+    window.scrollTo({ top: document.getElementById('apply').offsetTop - 70, behavior: 'smooth' });
+  }
+  function prevPage(from) {
+    document.getElementById('page-' + from).classList.remove('active');
+    document.getElementById('page-' + (from - 1)).classList.add('active');
+    currentPage = from - 1; updateProgress();
+    window.scrollTo({ top: document.getElementById('apply').offsetTop - 70, behavior: 'smooth' });
+  }
+  function updateProgress() {
+    document.querySelectorAll('.progress-step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (i === currentPage) s.classList.add('active');
+      else if (i < currentPage) s.classList.add('done');
+    });
+  }
+  function countWords(tid, cid, max) {
+    const val = document.getElementById(tid).value.trim();
+    const w = val ? val.split(/\s+/).filter(x => x.length > 0).length : 0;
+    const el = document.getElementById(cid);
+    el.querySelector('span').textContent = w;
+    el.classList.toggle('over', w > max);
+  }
+  function handleFile(input) {
+    if (input.files[0]) {
+      const el = document.getElementById('uploadedName');
+      el.style.display = 'block';
+      el.textContent = '✓ Uploaded: ' + input.files[0].name;
+    }
+  }
+  function submitForm() {
+    document.getElementById('page-4').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    document.querySelectorAll('.progress-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+    window.scrollTo({ top: document.getElementById('apply').offsetTop - 70, behavior: 'smooth' });
+  }
+  function toggleFaq(btn) {
+    const a = btn.nextElementSibling;
+    const open = a.classList.contains('open');
+    document.querySelectorAll('.faq-a.open').forEach(x => x.classList.remove('open'));
+    document.querySelectorAll('.faq-q.open').forEach(x => x.classList.remove('open'));
+    if (!open) { a.classList.add('open'); btn.classList.add('open'); }
+  }
+</script>
+</body>
+</html>
