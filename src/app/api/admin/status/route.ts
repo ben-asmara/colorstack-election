@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { NextResponse } from "@vercel/edge";
+import { NextResponse } from "next/server";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,7 +24,14 @@ export async function POST(request: Request) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
-  await supabase.from("applications").update({ status }).eq("id", id);
+  const { error } = await supabase
+    .from("applications")
+    .update({ status })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Status update failed:", error.message);
+  }
 
   return NextResponse.redirect(new URL("/admin", request.url));
 }
