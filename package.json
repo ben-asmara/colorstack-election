@@ -1,8 +1,11 @@
 {
   "name": "colorstack-election",
   "private": true,
-  "scripts": {
-    "dev": "next dev"
+   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.103.0",
@@ -15,4 +18,5 @@
     "@types/react": "19.2.14",
     "typescript": "6.0.2"
   }
+  
 }
