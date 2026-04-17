@@ -8,7 +8,7 @@ export default function AdminLoginPage({
   return (
     <>
       <style>{`
-        :root {
+        :root { 
           --black: #0a0a0a;
           --black-2: #111111;
           --black-3: #1a1a1a;
