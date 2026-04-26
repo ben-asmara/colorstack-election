@@ -8,9 +8,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const adminSession = request.cookies.get("admin_session")?.value;
+  const session = request.cookies.get("admin_session")?.value;
 
-  if (adminSession === "authenticated") {
+  if (session === "authenticated") {
     return NextResponse.next();
   }
 
