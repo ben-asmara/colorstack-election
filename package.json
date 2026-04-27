@@ -1,7 +1,7 @@
 {
   "name": "colorstack-election",
   "private": true,
-   "scripts": {
+  "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -11,12 +11,12 @@
     "@supabase/supabase-js": "^2.103.0",
     "next": "14.2.3",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "resend": "^6.12.2"
   },
   "devDependencies": {
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "typescript": "6.0.2"
   }
-  
 }
