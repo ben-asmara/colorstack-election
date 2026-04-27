@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       : "";
 
     await resend.emails.send({
-      from: "ColorStack <colorstack.calstatela@gmail.com>",
+      from: "onboarding@resend.dev",
       to: [email],
       subject: "We received your ColorStack application",
       html: `
@@ -78,8 +78,8 @@ export async function POST(request: Request) {
     });
 
     await resend.emails.send({
-      from: "ColorStack <colorstack.calstatela@gmail.com>",
-      to: ["bissno@calstatela.edu"],
+      from: "onboarding@resend.dev",
+      to: ["bissano@calstatela.edu"],
       subject: `New application from ${fullName}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
