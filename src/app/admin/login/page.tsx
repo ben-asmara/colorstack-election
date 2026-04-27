@@ -13,7 +13,6 @@ export default function AdminLoginPage({
           --black-2: #111111;
           --black-3: #1a1a1a;
           --gold: #f5a623;
-          --gold-dark: #c4831a;
           --gold-dim: rgba(245, 166, 35, 0.1);
           --gold-border: rgba(245, 166, 35, 0.28);
           --text: #ffffff;
@@ -26,80 +25,28 @@ export default function AdminLoginPage({
           box-sizing: border-box;
         }
 
-        html, body {
+        body {
           margin: 0;
-          padding: 0;
-          min-height: 100%;
+          min-height: 100vh;
           font-family: Arial, sans-serif;
-          background:
-            radial-gradient(circle at top right, rgba(245,166,35,0.10), transparent 28%),
-            radial-gradient(circle at bottom left, rgba(245,166,35,0.05), transparent 22%),
-            var(--black);
+          background: radial-gradient(circle at top right, rgba(245,166,35,0.08), transparent 30%), var(--black);
           color: var(--text);
         }
 
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .nav {
-          position: sticky;
-          top: 0;
-          z-index: 20;
-          height: 62px;
-          padding: 0 1.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border-bottom: 1px solid var(--border);
-          background: rgba(10, 10, 10, 0.94);
-          backdrop-filter: blur(14px);
-        }
-
-        .brand {
-          font-weight: 800;
-          font-size: 1.1rem;
-        }
-
-        .brand span {
-          color: var(--gold);
-        }
-
-        .nav-link {
-          color: var(--text-muted);
-          font-size: 0.95rem;
-        }
-
-        .nav-link:hover {
-          color: var(--gold);
-        }
-
         .wrap {
-          min-height: calc(100vh - 62px);
+          min-height: 100vh;
           display: grid;
           place-items: center;
-          padding: 2rem 1rem;
+          padding: 1.5rem;
         }
 
-        .shell {
+        .card {
           width: 100%;
-          max-width: 1040px;
-          display: grid;
-          grid-template-columns: 1.1fr 0.95fr;
-          border: 1px solid var(--border);
-          border-radius: 24px;
-          overflow: hidden;
+          max-width: 460px;
           background: var(--black-2);
-          box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-        }
-
-        .left {
-          padding: 3rem;
-          border-right: 1px solid var(--border);
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.02), transparent 30%),
-            var(--black-2);
+          border: 1px solid var(--border);
+          border-radius: 20px;
+          padding: 2rem;
         }
 
         .eyebrow {
@@ -109,277 +56,81 @@ export default function AdminLoginPage({
           background: var(--gold-dim);
           border: 1px solid var(--gold-border);
           color: var(--gold);
-          font-size: 0.72rem;
-          font-weight: 800;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
-          letter-spacing: 0.06em;
           margin-bottom: 1rem;
         }
 
-        .title {
-          margin: 0;
-          font-size: clamp(2.1rem, 4vw, 3.4rem);
-          line-height: 1.05;
+        h1 {
+          margin: 0 0 0.75rem;
+          font-size: 2rem;
         }
 
-        .title span {
-          color: var(--gold);
-          font-style: italic;
-        }
-
-        .desc {
-          margin: 1rem 0 1.5rem;
-          color: var(--text-soft);
-          line-height: 1.75;
-          max-width: 500px;
-          font-size: 1rem;
-        }
-
-        .feature-list {
-          display: grid;
-          gap: 0.9rem;
-          margin-top: 2rem;
-        }
-
-        .feature {
-          display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-          padding: 0.95rem 1rem;
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          background: var(--black-3);
-        }
-
-        .feature-icon {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          display: grid;
-          place-items: center;
-          background: var(--gold-dim);
-          border: 1px solid var(--gold-border);
-          color: var(--gold);
-          font-size: 0.95rem;
-          flex-shrink: 0;
-        }
-
-        .feature-title {
-          font-weight: 700;
-          margin-bottom: 0.2rem;
-        }
-
-        .feature-text {
-          color: var(--text-muted);
-          font-size: 0.92rem;
-          line-height: 1.55;
-        }
-
-        .right {
-          display: grid;
-          place-items: center;
-          padding: 2rem;
-          background:
-            radial-gradient(circle at top left, rgba(245,166,35,0.06), transparent 26%),
-            var(--black-2);
-        }
-
-        .card {
-          width: 100%;
-          max-width: 420px;
-          background: var(--black-3);
-          border: 1px solid var(--border);
-          border-radius: 20px;
-          padding: 2rem;
-        }
-
-        .card-title {
-          margin: 0 0 0.5rem;
-          font-size: 1.8rem;
-        }
-
-        .card-sub {
+        p {
           margin: 0 0 1.5rem;
           color: var(--text-soft);
           line-height: 1.7;
         }
 
-        .label {
+        label {
           display: block;
           margin-bottom: 0.5rem;
-          color: var(--text-soft);
           font-size: 0.95rem;
-          font-weight: 600;
+          color: var(--text-soft);
         }
 
-        .input {
+        input {
           width: 100%;
-          padding: 0.95rem 1rem;
-          border-radius: 14px;
+          padding: 0.9rem 1rem;
+          border-radius: 12px;
           border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.02);
-          color: #fff;
+          background: var(--black-3);
+          color: white;
           font-size: 1rem;
           outline: none;
         }
 
-        .input:focus {
+        input:focus {
           border-color: var(--gold);
-          box-shadow: 0 0 0 4px rgba(245,166,35,0.08);
         }
 
-        .button {
+        button {
           width: 100%;
           margin-top: 1rem;
-          padding: 1rem 1.1rem;
+          padding: 0.95rem 1rem;
           border: none;
           border-radius: 999px;
           background: var(--gold);
-          color: #000;
-          font-size: 1rem;
+          color: black;
           font-weight: 800;
+          font-size: 1rem;
           cursor: pointer;
-          transition: transform 0.15s ease, opacity 0.15s ease;
-        }
-
-        .button:hover {
-          transform: translateY(-1px);
-          opacity: 0.96;
         }
 
         .error {
           margin-top: 1rem;
-          padding: 0.85rem 1rem;
-          border-radius: 12px;
-          border: 1px solid rgba(248,113,113,0.28);
-          background: rgba(248,113,113,0.08);
-          color: #fca5a5;
+          color: #f87171;
           font-size: 0.95rem;
-        }
-
-        .tiny {
-          margin-top: 1rem;
-          color: var(--text-muted);
-          font-size: 0.86rem;
-          line-height: 1.6;
-        }
-
-        @media (max-width: 880px) {
-          .shell {
-            grid-template-columns: 1fr;
-          }
-
-          .left {
-            border-right: none;
-            border-bottom: 1px solid var(--border);
-          }
-        }
-
-        @media (max-width: 640px) {
-          .left,
-          .right,
-          .card {
-            padding: 1.5rem;
-          }
-
-          .nav {
-            padding: 0 1rem;
-          }
         }
       `}</style>
 
-      <nav className="nav">
-        <div className="brand">
-          <span>ColorStack</span> Admin
-        </div>
-        <a className="nav-link" href="/">
-          Back to site
-        </a>
-      </nav>
-
       <main className="wrap">
-        <div className="shell">
-          <section className="left">
-            <div className="eyebrow">Board review portal</div>
-            <h1 className="title">
-              Welcome to the <span>Admin</span> dashboard
-            </h1>
-            <p className="desc">
-              Review applications, update candidate status, and open uploaded
-              resumes in one place. This area is protected for board members
-              only.
-            </p>
+        <div className="card">
+          <div className="eyebrow">Protected access</div>
+          <h1>Admin Login</h1>
+          <p>Enter the admin password to access the application dashboard.</p>
 
-            <div className="feature-list">
-              <div className="feature">
-                <div className="feature-icon">✓</div>
-                <div>
-                  <div className="feature-title">Review applications faster</div>
-                  <div className="feature-text">
-                    See ranked positions, essay responses, and availability in a
-                    clean dashboard.
-                  </div>
-                </div>
-              </div>
+          <form action="/api/admin/login" method="POST">
+            <label htmlFor="password">Password</label>
+            <input id="password" name="password" type="password" required />
+            <button type="submit">Sign in</button>
+          </form>
 
-              <div className="feature">
-                <div className="feature-icon">★</div>
-                <div>
-                  <div className="feature-title">Track candidate status</div>
-                  <div className="feature-text">
-                    Move applicants through submitted, reviewing, interviewed,
-                    accepted, or rejected.
-                  </div>
-                </div>
-              </div>
-
-              <div className="feature">
-                <div className="feature-icon">↗</div>
-                <div>
-                  <div className="feature-title">Open resumes securely</div>
-                  <div className="feature-text">
-                    Access uploaded resume files through signed links from
-                    storage.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="right">
-            <div className="card">
-              <h2 className="card-title">Sign in</h2>
-              <p className="card-sub">
-                Enter the admin password to continue to the review dashboard.
-              </p>
-
-              <form action="/api/admin/login" method="POST">
-                <label className="label" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  className="input"
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                />
-                <button className="button" type="submit">
-                  Access dashboard
-                </button>
-              </form>
-
-              {hasError ? (
-                <div className="error">
-                  Incorrect password. Please try again.
-                </div>
-              ) : null}
-
-              <div className="tiny">
-                This page is restricted to authorized board reviewers.
-              </div>
-            </div>
-          </section>
+          {hasError ? (
+            <div className="error">Incorrect password. Please try again.</div>
+          ) : null}
         </div>
       </main>
     </>
